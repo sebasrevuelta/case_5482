@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-20.04
     strategy:
       matrix:
-        folder: ["basket", "browse"]
+        folder: ["basket", "browse", "campaigns", "onyx"]
     env:
       SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
     container:
@@ -26,6 +26,10 @@ jobs:
 
       - name: Run Semgrep
         run: |
-          cd apps/${{ matrix.folder }}
-          export SEMGREP_REPO_DISPLAY_NAME=onyx/${{ matrix.folder }}
-          semgrep ci
+          if [ ${{ matrix.folder }} == "onyx" ]; then
+            cd apps/${{ matrix.folder }}
+            export SEMGREP_REPO_DISPLAY_NAME=onyx/${{ matrix.folder }}
+            semgrep ci
+          else 
+            export SEMGREP_REPO_DISPLAY_NAME=onyx/${{ matrix.folder }}
+            semgrep ci --exclude='apps/**' --include='apps/onyx-auth/**'
