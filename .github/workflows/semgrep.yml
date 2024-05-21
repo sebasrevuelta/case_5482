@@ -1,3 +1,4 @@
+name: Test Matrix Workflow
 on:
   workflow_dispatch: {}
   pull_request: {}
@@ -7,18 +8,24 @@ on:
     - master
     paths:
     - .github/workflows/semgrep.yml
-  schedule:
-  # random HH:MM to avoid a load spike on GitHub Actions at 00:00
-  - cron: 22 3 * * *
-name: Semgrep
+
 jobs:
   semgrep:
     name: semgrep/ci
     runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        folder: ["basket", "browse"]
     env:
       SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
     container:
       image: returntocorp/semgrep
     steps:
-    - uses: actions/checkout@v3
-    - run: semgrep ci
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run Semgrep
+        run: |
+          cd apps/${{ matrix.folder }}
+          export SEMGREP_REPO_DISPLAY_NAME=onyx/${{ matrix.folder }}
+          semgrep ci
