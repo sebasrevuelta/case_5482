@@ -29,7 +29,7 @@ jobs:
         run: |
           if [ "${{ matrix.folder }}" == $REPO_NAME ]; then
             export SEMGREP_REPO_DISPLAY_NAME=$REPO_NAME
-            semgrep ci --include='apps/onyx-auth/**' --include='*.*'
+            semgrep ci
           else 
             export SEMGREP_REPO_DISPLAY_NAME=$REPO_NAME/${{ matrix.folder }}
             echo "semgrep ci --include='${{ matrix.folder }}/**' --include='libs/${{ matrix.folder }}/**'"
