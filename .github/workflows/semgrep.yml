@@ -31,8 +31,7 @@ jobs:
             export SEMGREP_REPO_DISPLAY_NAME=$REPO_NAME
             semgrep ci --exclude='apps/**' --exclude='libs/**' --include='apps/onyx-auth/**'
           else 
-            cd apps/${{ matrix.folder }}
             export SEMGREP_REPO_DISPLAY_NAME=$REPO_NAME/${{ matrix.folder }}
             echo "semgrep ci --include='${{ matrix.folder }}/**' --include='libs/${{ matrix.folder }}/**'"
-            semgrep ci --include='basket/**' --include='libs/basket/**'
+            semgrep ci --include='${{ matrix.folder }}/**' --include='libs/${{ matrix.folder }}/**'
           fi
