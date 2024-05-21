@@ -33,5 +33,5 @@ jobs:
           else 
             cd apps/${{ matrix.folder }}
             export SEMGREP_REPO_DISPLAY_NAME=$REPO_NAME/${{ matrix.folder }}
-            semgrep ci --include=onyx/${{ matrix.folder }} --include=onyx/libs/${{ matrix.folder }}
+            semgrep ci --include=onyx/${{ matrix.folder }}/** --include=onyx/libs/${{ matrix.folder }}/**
           fi
