@@ -24,8 +24,29 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+      
+      - name: Check changes in the folder
+        id: changes
+        run: |
+          if git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -q ${{ matrix.folder }}; then
+            echo "changes=true" >> $GITHUB_ENV
+          else
+            echo "changes=false" >> $GITHUB_ENV
+          fi
           
-      - name: Run Semgrep
+      - name: Run Semgrep Full Scan
+        if: github.event_name == 'push'
+        run: |
+          if [ "${{ matrix.folder }}" == $REPO_NAME ]; then
+            export SEMGREP_REPO_DISPLAY_NAME=$REPO_NAME
+            semgrep ci
+          else 
+            export SEMGREP_REPO_DISPLAY_NAME=$REPO_NAME/${{ matrix.folder }}
+            semgrep ci --include='${{ matrix.folder }}/**' --include='libs/${{ matrix.folder }}/**'
+          fi
+        
+      - name: Run Semgrep Pull Request Scan only for the folder with changes
+        if: env.changes == 'true' && github.event_name == 'pull_request'
         run: |
           if [ "${{ matrix.folder }}" == $REPO_NAME ]; then
             export SEMGREP_REPO_DISPLAY_NAME=$REPO_NAME
