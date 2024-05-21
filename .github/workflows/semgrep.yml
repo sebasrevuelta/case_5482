@@ -34,14 +34,24 @@ jobs:
             echo "changes=false" >> $GITHUB_ENV
           fi
           
-      - name: Run Semgrep
-        if: env.changes == 'true'
+      - name: Run Semgrep Full Scan
+        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
         run: |
           if [ "${{ matrix.folder }}" == $REPO_NAME ]; then
             export SEMGREP_REPO_DISPLAY_NAME=$REPO_NAME
             semgrep ci
           else 
             export SEMGREP_REPO_DISPLAY_NAME=$REPO_NAME/${{ matrix.folder }}
-            echo "semgrep ci --include='${{ matrix.folder }}/**' --include='libs/${{ matrix.folder }}/**'"
+            semgrep ci --include='${{ matrix.folder }}/**' --include='libs/${{ matrix.folder }}/**'
+          fi
+        
+      - name: Run Semgrep Pull Request Scan only for the folder with changes
+        if: env.changes == 'true' && github.event_name == 'pull_request'
+        run: |
+          if [ "${{ matrix.folder }}" == $REPO_NAME ]; then
+            export SEMGREP_REPO_DISPLAY_NAME=$REPO_NAME
+            semgrep ci
+          else 
+            export SEMGREP_REPO_DISPLAY_NAME=$REPO_NAME/${{ matrix.folder }}
             semgrep ci --include='${{ matrix.folder }}/**' --include='libs/${{ matrix.folder }}/**'
           fi
