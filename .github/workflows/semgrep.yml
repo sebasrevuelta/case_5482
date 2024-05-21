@@ -27,11 +27,11 @@ jobs:
 
       - name: Run Semgrep
         run: |
-          if [ "${{ matrix.folder }}" == $GLOBAL_VARIABLE ]; then
-            export SEMGREP_REPO_DISPLAY_NAME=$GLOBAL_VARIABLE
+          if [ "${{ matrix.folder }}" == $REPO_NAME ]; then
+            export SEMGREP_REPO_DISPLAY_NAME=$REPO_NAME
             semgrep ci --exclude='apps/**' --exclude='libs/**' --include='apps/onyx-auth/**'
           else 
             cd apps/${{ matrix.folder }}
-            export SEMGREP_REPO_DISPLAY_NAME=$GLOBAL_VARIABLE/${{ matrix.folder }}
+            export SEMGREP_REPO_DISPLAY_NAME=$REPO_NAME/${{ matrix.folder }}
             semgrep ci --include=onyx/${{ matrix.folder }} --include=onyx/libs/${{ matrix.folder }}
           fi
