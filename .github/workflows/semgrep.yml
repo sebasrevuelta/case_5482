@@ -29,7 +29,8 @@ jobs:
           if [ ${{ matrix.folder }} == "onyx" ]; then
             cd apps/${{ matrix.folder }}
             export SEMGREP_REPO_DISPLAY_NAME=onyx/${{ matrix.folder }}
-            semgrep ci
+            semgrep ci --include=onyx/${{ matrix.folder }} --include=onyx/libs/${{ matrix.folder }}
           else 
             export SEMGREP_REPO_DISPLAY_NAME=onyx/${{ matrix.folder }}
-            semgrep ci --exclude='apps/**' --include='apps/onyx-auth/**'
+            semgrep ci --exclude='apps/**' --exclude='libs/**' --include='apps/onyx-auth/**'
+          fi
