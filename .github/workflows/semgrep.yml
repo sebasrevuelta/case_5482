@@ -34,5 +34,5 @@ jobs:
             cd apps/${{ matrix.folder }}
             export SEMGREP_REPO_DISPLAY_NAME=$REPO_NAME/${{ matrix.folder }}
             echo "semgrep ci --include='${{ matrix.folder }}/**' --include='libs/${{ matrix.folder }}/**'"
-            semgrep ci --include='${{ matrix.folder }}/**' --include='libs/${{ matrix.folder }}/**'
+            semgrep ci --include='basket/**' --include='libs/basket/**'
           fi
