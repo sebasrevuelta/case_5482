@@ -35,7 +35,7 @@ jobs:
           fi
           
       - name: Run Semgrep Full Scan
-        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+        if: github.event_name == 'push'
         run: |
           if [ "${{ matrix.folder }}" == $REPO_NAME ]; then
             export SEMGREP_REPO_DISPLAY_NAME=$REPO_NAME
